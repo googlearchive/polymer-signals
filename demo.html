@@ -15,6 +15,7 @@
     Polymer('my-element', {
       ready: function() {
         this.asyncFire('polymer-signal', {name: "foo", data: "Foo!"});
+        this.asyncFire('app-signal', {name: "bar", data: "Bar!"});
       }
     });
   </script>
@@ -22,14 +23,16 @@
 
 <polymer-element name="my-app">
   <template>
-    <polymer-signals on-polymer-signal-foo="{{fooSignal}}"></polymer-signals>
+    <polymer-signals on-polymer-signal-foo="{{signalReceived}}"></polymer-signals>
+    <polymer-signals namespace="app-signal" on-app-signal-bar="{{signalReceived}}"></polymer-signals>
     <content></cotnent>
   </template>
   <script>
     Polymer('my-app', {
-      fooSignal: function(e, detail, sender) {
-        this.innerHTML += '<br>[my-app] got a [' + detail + '] signal<br>';
-      }
+      signalReceived: function(e, detail, sender) {
+        console.log(e);
+        this.innerHTML += '<br>[my-app] got a [' + detail + '] signal on the ' + e.type + ' namespace<br>';
+      },
     });
   </script>
 </polymer-element>
